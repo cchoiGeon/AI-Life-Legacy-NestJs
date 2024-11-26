@@ -3,31 +3,18 @@ import { ChatgptModule } from './chatgpt/chatgpt.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { User } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { typeORMConfig } from './configs/typeorm.config';
 
 @Module({
   imports: [
-    ChatgptModule,ConfigModule.
-    forRoot({
+    ConfigModule.forRoot({
       isGlobal:true
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: configService.get<string>('DB_TYPE') as any,
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        entities: [User],
-        synchronize: true,
-      }),
-    }),
+    TypeOrmModule.forRoot(typeORMConfig),
     UserModule,
     AuthModule,
+    ChatgptModule,
   ],
 })
 

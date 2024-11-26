@@ -6,15 +6,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { User } from '../user/user.entity';
+import * as config from 'config';
+
+const jwtConfig = config.get('jwt');
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }), // 기본 전략 설정
     TypeOrmModule.forFeature([User]), // TypeORM에서 User 엔티티 사용
     JwtModule.register({
-      secret: "123456", // JWT 서명 비밀 키
+      secret: jwtConfig.secret,
       signOptions: {
-        expiresIn: 360000 * 1000, // 만료 시간
+        expiresIn: jwtConfig.expiresIn,
       },
     }),
   ],

@@ -1,15 +1,17 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
+import * as config from 'config';
+
+const chatgptConfig = config.get('chatgpt');
 
 @Injectable()
 export class ChatgptService {
     private openai: OpenAI;
 
-    constructor(private configService: ConfigService) {
+    constructor() {
         this.openai = new OpenAI({
-            apiKey: this.configService.get<string>('OPENAI_API_KEY'),
-            organization: this.configService.get<string>('OPENAI_ORGANIZATION'),
+            apiKey: chatgptConfig.OPENAI_API_KEY,
+            organization: chatgptConfig.OPENAI_ORGANIZATION,
         });
     }
 
