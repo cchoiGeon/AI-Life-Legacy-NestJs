@@ -1,10 +1,12 @@
-import { Body, Controller, InternalServerErrorException, Post } from '@nestjs/common';
+import { Body, Controller, InternalServerErrorException, Post, UseGuards } from '@nestjs/common';
 import { ChatgptService } from './chatgpt.service';
 import { createCasePrompt } from '../utils/prompt/makeCase.prompt'
 import { createReQuestionPrompt } from 'src/utils/prompt/makeReQuestion.prompt';
 import { combinePrompt } from 'src/utils/prompt/combine.prompt';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('chatgpt')
+@UseGuards(AuthGuard())
 export class ChatgptController {
     constructor(private chatGptService: ChatgptService){}
 
