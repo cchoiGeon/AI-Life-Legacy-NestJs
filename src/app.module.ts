@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { typeORMConfig } from './configs/typeorm.config';
 import { MyprofileModule } from './myprofile/myprofile.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MyprofileModule } from './myprofile/myprofile.module';
     AuthModule,
     ChatgptModule,
     MyprofileModule,
+    PostModule,
   ],
 })
 
