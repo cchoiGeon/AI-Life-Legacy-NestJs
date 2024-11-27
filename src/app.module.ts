@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { typeORMConfig } from './configs/typeorm.config';
+import { MyprofileModule } from './myprofile/myprofile.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { typeORMConfig } from './configs/typeorm.config';
     UserModule,
     AuthModule,
     ChatgptModule,
+    MyprofileModule,
   ],
 })
 

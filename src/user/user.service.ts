@@ -9,9 +9,14 @@ export class UserService {
         @InjectRepository(User)
         private userRepository: Repository<User>,
     ) {}
+
     async getUserCase(uuid:string){
         const user = await this.userRepository.findOne({ where: { uuid }});
-        console.log(user)
         return user.userCase;
     }
+
+    async saveUserCase(uuid:string, caseId: string){
+        return await this.userRepository.update({ uuid }, { userCase:caseId });
+    }
+
 }
