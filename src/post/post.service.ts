@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Posts } from './posts.entitiy';
 import { Repository } from 'typeorm';
-import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Injectable()
 export class PostService {

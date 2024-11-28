@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CaseList } from './case.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GetMainQuestionDTO } from './dto/myprofile.dto';
 
 @Injectable()
 export class MyprofileService {
