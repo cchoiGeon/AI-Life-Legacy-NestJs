@@ -2,7 +2,7 @@ import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth.dto';
 import { Response } from 'express';
-import { User } from 'src/user/user.entity';
+import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,8 +11,8 @@ export class AuthController {
     @Post('/signup')
     async signup(
         @Body() authCredentialsDto: AuthCredentialsDto
-    ): Promise<User> {
-        return await this.authService.signup(authCredentialsDto);
+    ) {
+        return new SuccessResponseDTO (await this.authService.signup(authCredentialsDto));
     }
     
     @Post('/signin')
@@ -22,6 +22,6 @@ export class AuthController {
     ) {
         const { accessToken } = await this.authService.signIn(authCredentialsDto);
         res.cookie('accessToken', accessToken, { httpOnly: true });
-        return res.send('Cookie has been set');
+        return res.status(200).json(new SuccessResponseDTO);
     }
 }

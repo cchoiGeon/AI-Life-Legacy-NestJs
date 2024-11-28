@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
+import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Injectable()
 export class UserService {
@@ -12,11 +13,11 @@ export class UserService {
 
     async getUserCase(uuid:string){
         const user = await this.userRepository.findOne({ where: { uuid }});
-        return user.userCase;
+        return user.userCase; 
     }
 
     async saveUserCase(uuid:string, caseId: string){
-        return await this.userRepository.update({ uuid }, { userCase:caseId });
+        await this.userRepository.update({ uuid }, { userCase:caseId });
     }
 
 }

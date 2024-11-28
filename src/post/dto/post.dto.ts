@@ -27,7 +27,8 @@ export class PatchPostDTO {
 }
 
 export class CheckExistPostByMainIdDTO {
-    @IsNumber()
+    @Type(() => Number) // 문자열을 숫자로 변환
+    @IsInt() // 숫자인지 검증 (정수만 허용)
     mainId: number;
 }
 

@@ -2,6 +2,7 @@ import { Controller, Get, Param, UseGuards, ValidationPipe } from '@nestjs/commo
 import { AuthGuard } from '@nestjs/passport';
 import { MyprofileService } from './myprofile.service';
 import { GetMainQuestionDTO } from './dto/myprofile.dto';
+import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Controller('myprofile')
 @UseGuards(AuthGuard())
@@ -14,6 +15,6 @@ export class MyprofileController {
         @Param() getMainQuestionDTO: GetMainQuestionDTO
     ){
         const {caseId} = getMainQuestionDTO;
-        return await this.myprofileService.getMainQuestion(caseId);
+        return new SuccessResponseDTO(await this.myprofileService.getMainQuestion(caseId));
     }
 }

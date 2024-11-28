@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards, UsePipes, Va
 import { PostService } from './post.service';
 import { AuthGuard } from '@nestjs/passport';
 import { SavePostDTO, PatchPostDTO, CheckExistPostByMainIdDTO, GetPostDTO } from './dto/post.dto';
+import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Controller('post')
 @UseGuards(AuthGuard())
@@ -15,7 +16,8 @@ export class PostController {
     ) {
         const { data, question, mainId, subId } = savePostDTO;
         const uuid = req.user;
-        return await this.postService.savePost(uuid, data, question, mainId, subId);
+        await this.postService.savePost(uuid, data, question, mainId, subId);
+        return new SuccessResponseDTO;
     }
 
     @Patch('/')
@@ -25,23 +27,26 @@ export class PostController {
     ) {
         const { data, mainId, subId } = patchPostDTO;
         const uuid = req.user;
-        return await this.postService.updatePost(uuid, data, mainId, subId);
+        await this.postService.updatePost(uuid, data, mainId, subId);
+        return new SuccessResponseDTO;
     }
 
     @Get('/check')
-    async checkExistPostData(@Req() req): Promise<boolean> {
+    async checkExistPostData(
+        @Req() req
+    ) {
         const uuid = req.user;
-        return await this.postService.checkExistPostData(uuid);
+        return new SuccessResponseDTO(await this.postService.checkExistPostData(uuid));
     }
 
     @Get('/check/:mainId')
     async checkExistPostDataByMainId(
         @Param() params: CheckExistPostByMainIdDTO,
         @Req() req
-    ): Promise<boolean> {
+    ) {
         const { mainId } = params;
         const uuid = req.user;
-        return await this.postService.checkExistPostDataByMainId(uuid, mainId);
+        return new SuccessResponseDTO(await this.postService.checkExistPostDataByMainId(uuid, mainId));
     }
 
     @Get('/:mainId/:subId')
@@ -51,6 +56,6 @@ export class PostController {
     ) {
         const { mainId, subId } = params;
         const uuid = req.user;
-        return await this.postService.getPost(uuid, mainId, subId);
+        return new SuccessResponseDTO(await this.postService.getPost(uuid, mainId, subId));
     }
 }

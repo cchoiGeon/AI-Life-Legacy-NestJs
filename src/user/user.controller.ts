@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { MyprofileService } from 'src/myprofile/myprofile.service';
 import { SaveUserCaseDTO } from './dto/user.dto';
+import { SuccessResponseDTO } from 'src/utils/response/response.dto';
 
 @Controller('user')
 @UseGuards(AuthGuard())
@@ -19,7 +20,8 @@ export class UserController {
     ){
         const uuid = req.user;
         const { caseId } = saveUserCaseDTO;
-        return await this.userService.saveUserCase(uuid,caseId);
+        await this.userService.saveUserCase(uuid,caseId);
+        return new SuccessResponseDTO;
     }   
 
     @Get("/case")
@@ -27,7 +29,7 @@ export class UserController {
         @Req() req
     ){
         const uuid = req.user;
-        return await this.userService.getUserCase(uuid);
+        return new SuccessResponseDTO(await this.userService.getUserCase(uuid));
     }
 
     @Get("/question")
@@ -36,6 +38,6 @@ export class UserController {
     ){
         const uuid = req.user;
         const userCase = await this.userService.getUserCase(uuid);
-        return await this.myprofileService.getMainQuestion(userCase);
+        return new SuccessResponseDTO(await this.myprofileService.getMainQuestion(userCase));
     }
 }
