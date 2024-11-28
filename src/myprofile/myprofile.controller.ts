@@ -1,6 +1,7 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { MyprofileService } from './myprofile.service';
+import { GetMainQuestionDTO } from './dto/myprofile.dto';
 
 @Controller('myprofile')
 @UseGuards(AuthGuard())
@@ -10,8 +11,9 @@ export class MyprofileController {
     ){}
     @Get("/:caseId")
     async getMainQuestion(
-        @Param('caseId') caseId: string
+        @Param() getMainQuestionDTO: GetMainQuestionDTO
     ){
+        const {caseId} = getMainQuestionDTO;
         return await this.myprofileService.getMainQuestion(caseId);
     }
 }

@@ -1,64 +1,56 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 import { AuthGuard } from '@nestjs/passport';
+import { SavePostDTO, PatchPostDTO, CheckExistPostByMainIdDTO, GetPostDTO } from './dto/post.dto';
 
 @Controller('post')
 @UseGuards(AuthGuard())
 export class PostController {
-    constructor(private postService: PostService){}
+    constructor(private postService: PostService) {}
 
-    // 자서전 데이터 저장 로직 
     @Post('/')
     async savePost(
-        @Body('data') data: string,
-        @Body('question') question: string,
-        @Body('mainId') mainId: number,
-        @Body('subId') subId: number,
+        @Body() savePostDTO: SavePostDTO,
         @Req() req
-    ){
+    ) {
+        const { data, question, mainId, subId } = savePostDTO;
         const uuid = req.user;
-        return await this.postService.savePost(uuid,data,question,mainId,subId)
+        return await this.postService.savePost(uuid, data, question, mainId, subId);
     }
 
-    // 자서전 데이터 수정 로직 
     @Patch('/')
     async patchPost(
-        @Body('data') data: string,
-        @Body('mainId') mainId: number,
-        @Body('subId') subId: number,
+        @Body() patchPostDTO: PatchPostDTO,
         @Req() req
-    ){
+    ) {
+        const { data, mainId, subId } = patchPostDTO;
         const uuid = req.user;
-        return await this.postService.updatePost(uuid,data,mainId,subId)
+        return await this.postService.updatePost(uuid, data, mainId, subId);
     }
-    
-    // 자사전 작성을 한 번이라도 했는지 체크 
+
     @Get('/check')
-    async checkExistPostData(
-        @Req() req
-    ): Promise<boolean> {
+    async checkExistPostData(@Req() req): Promise<boolean> {
         const uuid = req.user;
         return await this.postService.checkExistPostData(uuid);
     }
 
-    // 특정 mainId에 사용자가 작성을 한 기록이 있는지 체크 
     @Get('/check/:mainId')
     async checkExistPostDataByMainId(
-        @Param('mainId') mainId: number,
+        @Param() params: CheckExistPostByMainIdDTO,
         @Req() req
     ): Promise<boolean> {
+        const { mainId } = params;
         const uuid = req.user;
-        return await this.postService.checkExistPostDataByMainId(uuid,mainId);
+        return await this.postService.checkExistPostDataByMainId(uuid, mainId);
     }
-    
-    // 자서전 작성 데이터 중 mainId와 subId를 파라미터로 받아 해당 정보를 반환 
+
     @Get('/:mainId/:subId')
     async getPost(
-        @Param('mainId') mainId: number,
-        @Param('subId') subId: number,
+        @Param() params: GetPostDTO,
         @Req() req
-    ){
+    ) {
+        const { mainId, subId } = params;
         const uuid = req.user;
-        return await this.postService.getPost(uuid,mainId,subId);
+        return await this.postService.getPost(uuid, mainId, subId);
     }
 }

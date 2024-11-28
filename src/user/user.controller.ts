@@ -2,6 +2,7 @@ import { Body, Controller, Get, InternalServerErrorException, Post, Req, Res, Us
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { MyprofileService } from 'src/myprofile/myprofile.service';
+import { SaveUserCaseDTO } from './dto/user.dto';
 
 @Controller('user')
 @UseGuards(AuthGuard())
@@ -13,10 +14,11 @@ export class UserController {
     
     @Post("/case")
     async saveUserCase(
-        @Body('caseId') caseId: string,
+        @Body() saveUserCaseDTO: SaveUserCaseDTO,
         @Req() req
     ){
         const uuid = req.user;
+        const { caseId } = saveUserCaseDTO;
         return await this.userService.saveUserCase(uuid,caseId);
     }   
 

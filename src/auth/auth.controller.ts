@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth.dto';
 import { Response } from 'express';
@@ -10,7 +10,7 @@ export class AuthController {
 
     @Post('/signup')
     async signup(
-        @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
+        @Body() authCredentialsDto: AuthCredentialsDto
     ): Promise<User> {
         return await this.authService.signup(authCredentialsDto);
     }
@@ -18,7 +18,7 @@ export class AuthController {
     @Post('/signin')
     async signIn(
         @Res() res: Response,
-        @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
+        @Body() authCredentialsDto: AuthCredentialsDto
     ) {
         const { accessToken } = await this.authService.signIn(authCredentialsDto);
         res.cookie('accessToken', accessToken, { httpOnly: true });

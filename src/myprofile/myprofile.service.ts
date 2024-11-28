@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CaseList } from './case.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { GetMainQuestionDTO } from './dto/myprofile.dto';
 
 @Injectable()
 export class MyprofileService {
@@ -9,7 +10,7 @@ export class MyprofileService {
         @InjectRepository(CaseList)
         private caseRepository: Repository<CaseList>,
     ) {}
-    async getMainQuestion(caseId: string) {
+    async getMainQuestion( caseId: string ) {
         const caseDataList = await this.caseRepository.find({where: {caseId}});
 
         const result = caseDataList.map((caseData,index)=>{
