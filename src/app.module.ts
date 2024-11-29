@@ -1,18 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ChatgptModule } from './chatgpt/chatgpt.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ChatgptModule } from './api/chatgpt/chatgpt.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { typeORMConfig } from './configs/typeorm.config';
-import { MyprofileModule } from './myprofile/myprofile.module';
-import { PostModule } from './post/post.module';
+import { UserModule } from './api/user/user.module';
+import { AuthModule } from './api/auth/auth.module';
+import { typeORMConfig } from 'src/db/config/typeorm.config';
+import { MyprofileModule } from './api/myprofile/myprofile.module';
+import { PostModule } from './api/post/post.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal:true
-    }),
     TypeOrmModule.forRoot(typeORMConfig),
     UserModule,
     AuthModule,
