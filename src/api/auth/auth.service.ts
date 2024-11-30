@@ -25,7 +25,7 @@ export class AuthService {
         try {
             const existUser = await this.userRepository.findOne({ where: { userId } });
             if (existUser) {
-                throw new ConflictException('Existing userId');
+                throw new ConflictException();
             }
 
             const hashPassword = await bcrypt.hash(password, 10);
@@ -35,6 +35,9 @@ export class AuthService {
             return await this.userRepository.save(user);
         } catch (error) {
             console.error('Error during signup:', error); // 에러 로그 출력
+            if(error.status == 409) {
+                throw new ConflictException('Existing userId');
+            }
             throw new InternalServerErrorException('Signup failed'); // 내부 서버 에러로 변환
         }
     }
@@ -46,7 +49,7 @@ export class AuthService {
             const user = await this.userRepository.findOne({ where: { userId } });
 
             if (!user) {
-                throw new UnauthorizedException('Invalid credentials'); // 적절한 예외 반환
+                throw new UnauthorizedException(); // 적절한 예외 반환
             }
 
             const checkPassword = await bcrypt.compare(password, user.password);
@@ -57,10 +60,13 @@ export class AuthService {
                 const accessToken = await this.jwtService.sign(payload);
                 return { accessToken };
             } else {
-                throw new UnauthorizedException('Invalid credentials');
+                throw new UnauthorizedException();
             }
         } catch (error) {
             console.error('Error during signIn:', error); // 에러 로그 출력
+            if(error.status == 401) {
+                throw new UnauthorizedException('Invalid credentials'); // 적절한 예외 반환
+            }
             throw new InternalServerErrorException('SignIn failed'); // 내부 서버 에러로 변환
         }
     }

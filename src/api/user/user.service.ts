@@ -15,12 +15,15 @@ export class UserService {
             const user = await this.userRepository.findOne({ where: { uuid } });
 
             if (!user) {
-                throw new NotFoundException("Not Found User");
+                throw new NotFoundException();
             }
 
             return user.userCase;
         } catch (error) {
             console.error('Error in getUserCase:', error);
+            if(error.status == 404){
+                throw new NotFoundException("Not Found User");
+            }
             throw new InternalServerErrorException('Failed to fetch user case');
         }
     }
@@ -30,10 +33,13 @@ export class UserService {
             const updateResult = await this.userRepository.update({ uuid }, { userCase: caseId });
 
             if (updateResult.affected === 0) {
-                throw new NotFoundException('User not found for update');
+                throw new NotFoundException();
             }
         } catch (error) {
             console.error('Error in saveUserCase:', error);
+            if(error.status == 404){
+                throw new NotFoundException("User not found for update");
+            }
             throw new InternalServerErrorException('Failed to save user case');
         }
     }

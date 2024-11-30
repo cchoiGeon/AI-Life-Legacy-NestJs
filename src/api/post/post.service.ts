@@ -27,10 +27,13 @@ export class PostService {
             );
 
             if (updateResult.affected === 0) {
-                throw new NotFoundException('Post not found for update');
+                throw new NotFoundException();
             }
         } catch (error) {
             console.error('Error in updatePost:', error);
+            if(error.status == 404){
+                throw new NotFoundException('Post not found for update');
+            }
             throw new InternalServerErrorException('Failed to update post');
         }
     }
@@ -62,12 +65,15 @@ export class PostService {
             });
 
             if (!post) {
-                throw new NotFoundException('Post not found');
+                throw new NotFoundException();
             }
 
             return { data: post.data, question: post.question };
         } catch (error) {
             console.error('Error in getPost:', error);
+            if(error.status == 404){
+                throw new NotFoundException('Post not found');
+            }
             throw new InternalServerErrorException('Failed to get post');
         }
     }

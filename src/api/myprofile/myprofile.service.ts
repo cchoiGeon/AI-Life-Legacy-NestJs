@@ -15,7 +15,7 @@ export class MyprofileService {
             // 데이터베이스에서 caseId에 해당하는 데이터 조회
             const caseList = await this.caseRepository.find({ where: { caseId } });
             if (!caseList || caseList.length === 0) {
-                throw new NotFoundException('Not Found User CaseId');
+                throw new NotFoundException();
             }
 
             // 각 데이터를 매핑하여 새로운 객체 배열 생성
@@ -33,6 +33,9 @@ export class MyprofileService {
             return combinedContent;
         } catch (error) {
             console.error('Error in getMainQuestion:', error);
+            if(error.status == 404){
+                throw new NotFoundException('Not Found User CaseId');
+            }
             throw new InternalServerErrorException('Failed to get main question data');
         }
     }
