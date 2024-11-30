@@ -1,11 +1,11 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-import { swaggerDocs } from './index';
+import { swaggerDocs } from './index.swagger';
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
-    .setTitle('ChatGPT API 문서')
-    .setDescription('ChatGPT와 연동된 API에 대한 문서입니다.')
+    .setTitle('AI 자서전 API 문서')
+    .setDescription('AI 자서전 서비스에 관련된 문서입니다.')
     .setVersion('1.0')
     .build();
 
