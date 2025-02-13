@@ -13,7 +13,8 @@ export class UserRepository{
     async findUserByUUID(uuid: string){
         try{
             return await this.userRepository.findOne({ 
-                where: { uuid } 
+                where: { uuid },
+                relations: ['userCase'],
             });
         }catch(err){
             console.error(err);
@@ -60,14 +61,14 @@ export class UserRepository{
         }
     }
 
-    // async (){
-    //     try{
-
-    //     }catch(err){
-    //         console.error(err);
-    //         throw new InternalServerErrorException();
-    //     }
-    // }
+    async saveUser(user:Users){
+        try{
+            return await this.userRepository.save(user);
+        }catch(err){
+            console.error(err);
+            throw new InternalServerErrorException();
+        }
+    }
 
     // async (){
     //     try{

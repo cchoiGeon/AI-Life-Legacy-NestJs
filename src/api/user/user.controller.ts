@@ -25,7 +25,8 @@ export class UserController {
         @Req() req: any
     ){
         const { uuid } = req.user;
-        return new SuccessResponseDTO(await this.userService.setUserCase(uuid,setUserCaseDTO));
+        await this.userService.setUserCase(uuid,setUserCaseDTO);
+        return new SuccessResponseDTO;
     }   
 
     @Get("/question")
