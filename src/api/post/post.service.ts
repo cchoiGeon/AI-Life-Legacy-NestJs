@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Posts } from '../../db/entity/posts.entitiy';
+import { Posts } from '../../db/entity/posts.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class PostService {
 
     async savePost(uuid: string, data: string, question: string, mainId: number, subId: number): Promise<void> {
         try {
-            await this.postsRepository.save({ uuid, data, question, mainId, subId });
+            // await this.postsRepository.save({ uuid, data, question, mainId, subId });
         } catch (error) {
             console.error('Error in savePost:', error);
             throw new InternalServerErrorException('Failed to save post');
@@ -21,14 +21,14 @@ export class PostService {
 
     async updatePost(uuid: string, data: string, mainId: number, subId: number): Promise<void> {
         try {
-            const updateResult = await this.postsRepository.update(
-                { uuid }, // 조건
-                { uuid, data, mainId, subId }, // 업데이트할 내용
-            );
+            // const updateResult = await this.postsRepository.update(
+            //     { user: {uuid} }, // 조건
+            //     { user: {uuid}, data, mainId, subId }, // 업데이트할 내용
+            // );
 
-            if (updateResult.affected === 0) {
-                throw new NotFoundException();
-            }
+            // if (updateResult.affected === 0) {
+            //     throw new NotFoundException();
+            // }
         } catch (error) {
             console.error('Error in updatePost:', error);
             if(error.status == 404){
@@ -40,7 +40,7 @@ export class PostService {
 
     async checkExistPostData(uuid: string): Promise<boolean> {
         try {
-            const existPost = await this.postsRepository.find({ where: { uuid } });
+            const existPost = await this.postsRepository.find({ where: { user: {uuid} } });
             return existPost.length > 0;
         } catch (error) {
             console.error('Error in checkExistPostData:', error);
@@ -48,27 +48,27 @@ export class PostService {
         }
     }
 
-    async checkExistPostDataByMainId(uuid: string, mainId: number): Promise<boolean> {
+    async checkExistPostDataByMainId(uuid: string, mainId: number) {
         try {
-            const existPost = await this.postsRepository.find({ where: { uuid, mainId } });
-            return existPost.length > 0;
+            // const existPost = await this.postsRepository.find({ where: { user: {uuid}, mainId } });
+            // return existPost.length > 0;
         } catch (error) {
             console.error('Error in checkExistPostDataByMainId:', error);
             throw new InternalServerErrorException('Failed to check post existence by mainId');
         }
     }
 
-    async getPost(uuid: string, mainId: number, subId: number): Promise<{ data: string; question: string }> {
+    async getPost(uuid: string, mainId: number, subId: number) {
         try {
-            const post = await this.postsRepository.findOne({
-                where: { uuid, mainId, subId },
-            });
+            // const post = await this.postsRepository.findOne({
+            //     where: { user: {uuid}, mainId, subId },
+            // });
 
-            if (!post) {
-                throw new NotFoundException();
-            }
+            // if (!post) {
+            //     throw new NotFoundException();
+            // }
 
-            return { data: post.data, question: post.question };
+            // return { data: post.data, question: post.question };
         } catch (error) {
             console.error('Error in getPost:', error);
             if(error.status == 404){

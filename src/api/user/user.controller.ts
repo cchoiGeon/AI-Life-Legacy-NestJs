@@ -1,8 +1,7 @@
 import { Body, Controller, Get, InternalServerErrorException, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { MyprofileService } from 'src/api/myprofile/myprofile.service';
-import { SaveUserCaseDTO } from './dto/user.dto';
+import { SetUserCaseDTO } from './dto/user.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
 
 @Controller('user')
@@ -10,27 +9,24 @@ import { SuccessResponseDTO } from 'src/common/response/response.dto';
 export class UserController {
     constructor (
         private userService: UserService,
-        private myprofileService: MyprofileService,
     ){}
-    
-    @Post("/case")
-    async saveUserCase(
-        @Body() saveUserCaseDTO: SaveUserCaseDTO,
-        @Req() req
-    ){
-        const uuid = req.user;
-        const { caseId } = saveUserCaseDTO;
-        await this.userService.saveUserCase(uuid,caseId);
-        return new SuccessResponseDTO;
-    }   
 
     @Get("/case")
     async getUserCase(
-        @Req() req
+        @Req() req: any
     ){
         const uuid = req.user;
         return new SuccessResponseDTO(await this.userService.getUserCase(uuid));
     }
+
+    @Post("/case")
+    async setUserCase(
+        @Body() setUserCaseDTO: SetUserCaseDTO,
+        @Req() req: any
+    ){
+        const { uuid } = req.user;
+        return new SuccessResponseDTO(await this.userService.setUserCase(uuid,setUserCaseDTO));
+    }   
 
     @Get("/question")
     async getUserMainQuestion(
@@ -38,6 +34,5 @@ export class UserController {
     ){
         const uuid = req.user;
         const userCase = await this.userService.getUserCase(uuid);
-        return new SuccessResponseDTO(await this.myprofileService.getMainQuestion(userCase));
     }
 }

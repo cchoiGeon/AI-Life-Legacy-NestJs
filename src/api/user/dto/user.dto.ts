@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class SaveUserCaseDTO {
+export class SetUserCaseDTO {
     @IsString()
-    caseId: string;
+    caseName: string;
 }

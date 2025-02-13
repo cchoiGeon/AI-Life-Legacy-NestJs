@@ -1,34 +1,28 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { InjectRepository } from "@nestjs/typeorm";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { User } from "../../db/entity/user.entity";
-import { Repository } from "typeorm";
 import * as config from 'config';
+import { Users } from "src/db/entity/users.entity";
+import { UserRepository } from "../user/user.repository";
 
 const jwtConfig = config.get('jwt');
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        private userRepository: UserRepository,
     ) {
         super({
             secretOrKey: jwtConfig.secret,
-            jwtFromRequest: ExtractJwt.fromExtractors([(request) => {
-                // 쿠키에서 JWT 추출
-                return request?.cookies?.accessToken || null;
-            }]),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         });
     }
 
     async validate(payload) {
         const { uuid } = payload;
-
-        const user: User = await this.userRepository.findOne({ where: { uuid } });
+        const user: Users = await this.userRepository.findUserByUUID(uuid);
         if(!user) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('NOT_EXIST_USER');
         }
 
         return user.uuid;

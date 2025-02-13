@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './api/auth/auth.module';
 import { typeORMConfig } from 'src/db/config/typeorm.config';
-import { MyprofileModule } from './api/myprofile/myprofile.module';
 import { PostModule } from './api/post/post.module';
+import { AppController } from './app.controller';
+import { UserCaseModule } from './api/user-case/user-case.module';
 
 @Module({
   imports: [
@@ -13,9 +14,10 @@ import { PostModule } from './api/post/post.module';
     UserModule,
     AuthModule,
     ChatgptModule,
-    MyprofileModule,
     PostModule,
+    UserCaseModule,
   ],
+  controllers:[AppController],
 })
 
 export class AppModule {}

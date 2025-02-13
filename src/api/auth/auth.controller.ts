@@ -20,8 +20,6 @@ export class AuthController {
         @Res() res: Response,
         @Body() authCredentialsDto: AuthCredentialsDto
     ) {
-        const { accessToken } = await this.authService.signIn(authCredentialsDto);
-        res.cookie('accessToken', accessToken, { httpOnly: true });
-        return res.status(200).json(new SuccessResponseDTO);
+        return new SuccessResponseDTO (await this.authService.signIn(authCredentialsDto));
     }
 }

@@ -12,7 +12,7 @@ import { SuccessResponseDTO } from 'src/common/response/response.dto';
 export class ChatgptController {
   constructor(private chatGptService: ChatgptService) {}
 
-  @Post('/makeCase')
+  @Post('/case')
   async makeCase(@Body() makeCaseDTO: MakeCaseDTO) {
     const CHATGPTTOKEN = 100;
     const prompt = createCasePrompt(makeCaseDTO.data);
@@ -20,7 +20,7 @@ export class ChatgptController {
     return new SuccessResponseDTO(await this.chatGptService.getChatGPTData(prompt, CHATGPTTOKEN));
   }
 
-  @Post('/makeReQuestion')
+  @Post('/question')
   async makeReQuestion(@Body() makeReQuestionDTO: MakeReQuestionDTO) {
     const CHATGPTTOKEN = 1000;
     const { question, data } = makeReQuestionDTO;
