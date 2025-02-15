@@ -6,20 +6,19 @@ import { SuccessResponseDTO } from 'src/common/response/response.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService){}
+  constructor(private authService: AuthService) {}
 
-    @Post('/signup')
-    async signup(
-        @Body() authCredentialsDto: AuthCredentialsDto
-    ) {
-        return new SuccessResponseDTO (await this.authService.signup(authCredentialsDto));
-    }
-    
-    @Post('/signin')
-    async signIn(
-        @Res() res: Response,
-        @Body() authCredentialsDto: AuthCredentialsDto
-    ) {
-        return new SuccessResponseDTO (await this.authService.signIn(authCredentialsDto));
-    }
+  @Post('/signup')
+  async signup(@Body() authCredentialsDto: AuthCredentialsDto) {
+    return new SuccessResponseDTO(
+      await this.authService.signup(authCredentialsDto),
+    );
+  }
+
+  @Post('/signin')
+  async signIn(@Body() authCredentialsDto: AuthCredentialsDto) {
+    return new SuccessResponseDTO(
+      await this.authService.signIn(authCredentialsDto),
+    );
+  }
 }

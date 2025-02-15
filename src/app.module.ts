@@ -7,6 +7,7 @@ import { typeORMConfig } from 'src/db/config/typeorm.config';
 import { PostModule } from './api/post/post.module';
 import { AppController } from './app.controller';
 import { UserCaseModule } from './api/user-case/user-case.module';
+import { ContentModule } from './api/content/content.module';
 
 @Module({
   imports: [
@@ -16,8 +17,8 @@ import { UserCaseModule } from './api/user-case/user-case.module';
     ChatgptModule,
     PostModule,
     UserCaseModule,
+    ContentModule,
   ],
-  controllers:[AppController],
+  controllers: [AppController],
 })
-
 export class AppModule {}

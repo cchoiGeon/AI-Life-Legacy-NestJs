@@ -6,15 +6,17 @@ import { Users } from '../../db/entity/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { UserCaseModule } from '../user-case/user-case.module';
+import { ContentModule } from '../content/content.module';
 
 @Module({
-  imports:[
+  imports: [
     TypeOrmModule.forFeature([Users]),
-    forwardRef(()=>AuthModule),
+    forwardRef(() => AuthModule),
     UserCaseModule,
+    ContentModule,
   ],
   controllers: [UserController],
-  providers: [UserService,UserRepository],
-  exports: [UserService,UserRepository],
+  providers: [UserService, UserRepository],
+  exports: [UserService, UserRepository],
 })
 export class UserModule {}

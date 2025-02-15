@@ -6,12 +6,7 @@ import { setupSwagger } from './swagger/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new CustomValidationPipe());
-    // CORS 활성화
-    // app.enableCors({
-    //   origin: '*', // 허용할 도메인
-    //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    //   credentials: true, 
-    // });
+  // CORS 활성화
   setupSwagger(app);
   await app.listen(process.env.PORT ?? 3000);
 }
