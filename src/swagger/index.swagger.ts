@@ -1,12 +1,12 @@
 import { authSwaggerDocs } from './auth.swagger';
-import { chatGptSwaggerDocs } from './chatgpt.swagger';
+import { chatGptSwaggerDocs } from './ai.swagger';
 import { userSwaggerDocs } from './user.swagger';
 import { myProfileSwaggerDocs } from './myprofile.swagger';
 import { postSwaggerDocs } from './posts.swagger';
 
 export const swaggerDocs = {
   paths: {
-    // 유저 
+    // 유저
     '/user/case': {
       post: {
         ...userSwaggerDocs.saveUserCase,
@@ -15,46 +15,46 @@ export const swaggerDocs = {
       get: {
         ...userSwaggerDocs.getUserCase,
         tags: ['User'],
-      }
+      },
     },
     '/user/question': {
       get: {
         ...userSwaggerDocs.getUserMainQuestion,
         tags: ['User'],
-      }
+      },
     },
 
-    // 인증 
+    // 인증
     '/auth/signup': {
       post: {
         ...authSwaggerDocs.signup,
-        tags: ['Auth'], 
+        tags: ['Auth'],
       },
     },
     '/auth/signin': {
       post: {
         ...authSwaggerDocs.signin,
-        tags: ['Auth'], 
+        tags: ['Auth'],
       },
     },
 
-    // Chat GPT 
-    '/chatgpt/makeCase': {
+    // Chat GPT
+    '/ai/makeCase': {
       post: {
         ...chatGptSwaggerDocs.makeCase,
-        tags: ['ChatGPT'],
+        tags: ['AI'],
       },
     },
-    '/chatgpt/makeReQuestion': {
+    '/ai/makeReQuestion': {
       post: {
         ...chatGptSwaggerDocs.makeReQuestion,
-        tags: ['ChatGPT'],
+        tags: ['AI'],
       },
     },
-    '/chatgpt/combine': {
+    '/ai/combine': {
       post: {
         ...chatGptSwaggerDocs.combine,
-        tags: ['ChatGPT'],
+        tags: ['AI'],
       },
     },
 
@@ -80,7 +80,7 @@ export const swaggerDocs = {
     '/post/check': {
       get: {
         ...postSwaggerDocs.checkExistPostData,
-        tags: ['Post'], 
+        tags: ['Post'],
       },
     },
     '/post/check/{mainId}': {
@@ -101,7 +101,7 @@ export const swaggerDocs = {
       name: 'Auth',
     },
     {
-      name: 'ChatGPT',
+      name: 'AI',
     },
     {
       name: 'User',
@@ -111,6 +111,6 @@ export const swaggerDocs = {
     },
     {
       name: 'MyProfile',
-    }
+    },
   ],
 };

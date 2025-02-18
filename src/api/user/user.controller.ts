@@ -2,12 +2,11 @@ import {
   Body,
   Controller,
   Get,
-  InternalServerErrorException, Param,
+  Param,
   Post,
   Req,
-  Res,
-  UseGuards
-} from "@nestjs/common";
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { SetUserCaseDTO } from './dto/user.dto';
@@ -41,6 +40,14 @@ export class UserController {
   async getUserQuestion(@Param('contentsId') contentsId: number) {
     return new SuccessResponseDTO(
       await this.userService.getQuestionsByContentId(contentsId),
+    );
+  }
+
+  @Get('/posts')
+  async getUserPosts(@Req() req: any) {
+    const uuid = req.user;
+    return new SuccessResponseDTO(
+      await this.userService.getUserPostsByUUID(uuid),
     );
   }
 }

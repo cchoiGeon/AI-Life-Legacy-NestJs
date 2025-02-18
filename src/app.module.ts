@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ChatgptModule } from './api/chatgpt/chatgpt.module';
+import { AiModule } from './api/ai/ai.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './api/auth/auth.module';
@@ -14,7 +14,7 @@ import { ContentModule } from './api/content/content.module';
     TypeOrmModule.forRoot(typeORMConfig),
     UserModule,
     AuthModule,
-    ChatgptModule,
+    AiModule,
     PostModule,
     UserCaseModule,
     ContentModule,

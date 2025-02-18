@@ -7,6 +7,7 @@ import { UserRepository } from './user.repository';
 import { UserCaseRepository } from '../user-case/user-case.repository';
 import { SetUserCaseDTO } from './dto/user.dto';
 import { ContentsRepository } from '../content/contents.repository';
+import { PostRepository } from '../post/post.repository';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
     private userRepository: UserRepository,
     private userCaseRepository: UserCaseRepository,
     private contentsRepository: ContentsRepository,
+    private postsRepository: PostRepository,
   ) {}
 
   async getUserCase(uuid: string): Promise<string> {
@@ -76,5 +78,9 @@ export class UserService {
       content,
       questions: questionList,
     };
+  }
+
+  async getUserPostsByUUID(uuid: string) {
+    return await this.postsRepository.findUserPostsByUUID(uuid);
   }
 }

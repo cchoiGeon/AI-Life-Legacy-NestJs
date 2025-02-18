@@ -5,7 +5,7 @@ import * as config from 'config';
 const chatgptConfig = config.get('chatgpt');
 
 @Injectable()
-export class ChatgptService {
+export class AiService {
     private openai: OpenAI;
 
     constructor() {

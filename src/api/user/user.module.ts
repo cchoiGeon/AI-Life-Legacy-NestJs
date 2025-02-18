@@ -7,11 +7,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { UserCaseModule } from '../user-case/user-case.module';
 import { ContentModule } from '../content/content.module';
+import { PostModule } from '../post/post.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Users]),
     forwardRef(() => AuthModule),
+    forwardRef(() => PostModule),
     UserCaseModule,
     ContentModule,
   ],
