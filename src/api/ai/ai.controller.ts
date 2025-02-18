@@ -1,11 +1,11 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { createCasePrompt } from '../../common/prompt/makeCase.prompt'
 import { createReQuestionPrompt } from 'src/common/prompt/makeReQuestion.prompt';
 import { combinePrompt } from 'src/common/prompt/combine.prompt';
 import { AuthGuard } from '@nestjs/passport';
 import { CombineDTO, MakeCaseDTO, MakeReQuestionDTO } from './dto/ai.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
+import { createCasePrompt } from '../../common/prompt/makeCase.prompt';
 
 @Controller('ai')
 @UseGuards(AuthGuard())
@@ -16,7 +16,6 @@ export class AiController {
   async makeCase(@Body() makeCaseDTO: MakeCaseDTO) {
     const CHATGPTTOKEN = 100;
     const prompt = createCasePrompt(makeCaseDTO.data);
-
     return new SuccessResponseDTO(await this.chatGptService.getChatGPTData(prompt, CHATGPTTOKEN));
   }
 

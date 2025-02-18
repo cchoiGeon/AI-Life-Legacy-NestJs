@@ -29,7 +29,6 @@ export class UserService {
 
   async setUserCase(uuid: string, setUserCaseDTO: SetUserCaseDTO) {
     const { caseName } = setUserCaseDTO;
-
     const user = await this.userRepository.findUserByUUID(uuid);
     if (!user) throw new UnauthorizedException('Not Exist User');
 

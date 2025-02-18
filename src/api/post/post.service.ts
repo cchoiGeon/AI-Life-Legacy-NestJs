@@ -8,8 +8,17 @@ import { UpdateResult } from 'typeorm';
 export class PostService {
   constructor(private postRepository: PostRepository) {}
 
-  async savePost(uuid: string, savePostDto: SavePostDTO): Promise<Posts> {
+  async savePost(uuid: string, savePostDto: SavePostDTO) {
     const { contentId, questionId, response } = savePostDto;
+    const existResponse = await this.postRepository.findUserPostsByContentIdAndQuestionId(uuid, contentId, questionId);
+    if (existResponse) {
+      return await this.postRepository.updatePost(
+        uuid,
+        contentId,
+        questionId,
+        response,
+      );
+    }
     return await this.postRepository.savePost(
       uuid,
       contentId,

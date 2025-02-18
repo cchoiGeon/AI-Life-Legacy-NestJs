@@ -9,6 +9,20 @@ export class PostRepository {
     private postRepository: Repository<Posts>,
   ) {}
 
+  async findUserPostsByContentIdAndQuestionId(uuid: string, contentId: number, questionId: number) {
+    try {
+      return await this.postRepository.findOne({
+        where: {
+          user: { uuid },
+          content: { id: contentId },
+          question: { id: questionId },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
   async findUserPostsByUUID(uuid: string) {
     try {
       return await this.postRepository.find({
