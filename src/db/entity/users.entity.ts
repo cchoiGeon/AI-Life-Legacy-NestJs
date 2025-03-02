@@ -5,20 +5,22 @@ import { UserCase } from "./user-case.entity";
 
 @Entity('users')
 export class Users extends BaseEntity {
-    
-    @PrimaryColumn()
-    uuid: string = uuid();
-    
-    @Column({ unique: true })
-    email: string;
+  @PrimaryColumn()
+  uuid: string = uuid();
 
-    @Column({ nullable: true})
-    password: string;
+  @Column()
+  refreshToken: string;
 
-    @OneToMany(() => Posts, (posts) => posts.user) 
-    posts: Posts;
+  @Column({ unique: true })
+  email: string;
 
-    @OneToOne(() => UserCase)
-    @JoinColumn({ name: 'user_case' })
-    userCase: UserCase;
+  @Column({ nullable: true })
+  password: string;
+
+  @OneToMany(() => Posts, (posts) => posts.user)
+  posts: Posts;
+
+  @OneToOne(() => UserCase)
+  @JoinColumn({ name: 'user_case' })
+  userCase: UserCase;
 }

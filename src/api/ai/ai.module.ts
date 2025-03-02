@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AiController } from './ai.controller';
 import { AiService } from './ai.service';
-import { AuthModule } from 'src/api/auth/auth.module';
+import { JwtModule } from '../jwt/jwt.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [JwtModule],
   controllers: [AiController],
   providers: [AiService],
 })

@@ -73,6 +73,30 @@ export class UserRepository {
     }
   }
 
+  async findUserRefreshByUUID(uuid: string) {
+    try {
+      return await this.userRepository.findOne({ where: { uuid } });
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException();
+    }
+  }
+  async updateUserRefreshToken(uuid: string, refreshToken: string) {
+    try {
+      return await this.userRepository.update(
+        {
+          uuid,
+        },
+        {
+          refreshToken,
+        },
+      );
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException();
+    }
+  }
+
   // async (){
   //     try{
 

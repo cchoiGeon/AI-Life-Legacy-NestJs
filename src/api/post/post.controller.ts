@@ -7,12 +7,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { AuthGuard } from '@nestjs/passport';
 import { SavePostDTO, PatchPostDTO } from './dto/post.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 
 @Controller('post')
-@UseGuards(AuthGuard())
+@UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(private postService: PostService) {}
 

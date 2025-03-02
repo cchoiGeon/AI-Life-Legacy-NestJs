@@ -2,13 +2,13 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AiService } from './ai.service';
 import { createReQuestionPrompt } from 'src/common/prompt/makeReQuestion.prompt';
 import { combinePrompt } from 'src/common/prompt/combine.prompt';
-import { AuthGuard } from '@nestjs/passport';
 import { CombineDTO, MakeCaseDTO, MakeReQuestionDTO } from './dto/ai.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
 import { createCasePrompt } from '../../common/prompt/makeCase.prompt';
+import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
 
 @Controller('ai')
-@UseGuards(AuthGuard())
+@UseGuards(JwtAuthGuard)
 export class AiController {
   constructor(private chatGptService: AiService) {}
 

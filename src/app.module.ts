@@ -8,12 +8,14 @@ import { PostModule } from './api/post/post.module';
 import { AppController } from './app.controller';
 import { UserCaseModule } from './api/user-case/user-case.module';
 import { ContentModule } from './api/content/content.module';
+import { JwtModule } from './api/jwt/jwt.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
-    UserModule,
+    JwtModule,
     AuthModule,
+    UserModule,
     AiModule,
     PostModule,
     UserCaseModule,

@@ -7,13 +7,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { SetUserCaseDTO } from './dto/user.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 
 @Controller('user')
-@UseGuards(AuthGuard())
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 

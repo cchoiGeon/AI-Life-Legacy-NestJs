@@ -20,4 +20,10 @@ export class AuthController {
       await this.authService.signIn(authCredentialsDto),
     );
   }
+
+  @Post('/refresh')
+  async refresh(@Body() body:any) {
+    const { refreshToken } = body;
+    return new SuccessResponseDTO(await this.authService.refresh(refreshToken));
+  }
 }

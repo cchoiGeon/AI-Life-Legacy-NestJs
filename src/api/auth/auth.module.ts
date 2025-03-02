@@ -1,27 +1,14 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
-import * as config from 'config';
 import { UserModule } from '../user/user.module';
-
-const jwtConfig = config.get('jwt');
+import { JwtModule } from '../jwt/jwt.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }), // 기본 전략 설정
-    JwtModule.register({
-      secret: jwtConfig.secret,
-      signOptions: {
-        expiresIn: jwtConfig.expiresIn,
-      },
-    }),
-    forwardRef(() => UserModule),
-  ],
+  imports: [forwardRef(() => UserModule), JwtModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy], // 서비스와 전략 제공
-  exports: [AuthService, JwtStrategy, PassportModule], // 외부에서 사용 가능하도록 export
+  providers: [AuthService, JwtService], // 서비스와 전략 제공
+  exports: [AuthService], // 외부에서 사용 가능하도록 export
 })
 export class AuthModule {}
