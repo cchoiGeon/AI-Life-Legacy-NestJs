@@ -33,24 +33,6 @@ export class UserRepository {
     }
   }
 
-  async setUserCaseByUserCaseID(uuid: string, userCaseId: number) {
-    try {
-      return await this.userRepository.update(
-        {
-          uuid,
-        },
-        {
-          userCase: {
-            id: userCaseId,
-          },
-        },
-      );
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException();
-    }
-  }
-
   async createAndSaveUserByEmailAndPassword(email: string, password: string) {
     try {
       const user = await this.userRepository.create({
@@ -73,14 +55,6 @@ export class UserRepository {
     }
   }
 
-  async findUserRefreshByUUID(uuid: string) {
-    try {
-      return await this.userRepository.findOne({ where: { uuid } });
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException();
-    }
-  }
   async updateUserRefreshToken(uuid: string, refreshToken: string) {
     try {
       return await this.userRepository.update(
@@ -97,12 +71,12 @@ export class UserRepository {
     }
   }
 
-  // async (){
-  //     try{
-
-  //     }catch(err){
-  //         console.error(err);
-  //         throw new InternalServerErrorException();
-  //     }
-  // }
+  async deleteUser(user: Users) {
+    try {
+      return await this.userRepository.softRemove(user);
+    } catch (err) {
+      console.error('Error deleting user:', err);
+      throw new InternalServerErrorException();
+    }
+  }
 }

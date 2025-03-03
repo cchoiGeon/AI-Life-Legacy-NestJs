@@ -23,7 +23,7 @@ export class PostRepository {
       throw new InternalServerErrorException();
     }
   }
-  async findUserPostsByUUID(uuid: string) {
+  async findAllUserPostsByUUID(uuid: string) {
     try {
       return await this.postRepository.find({
         where: {
