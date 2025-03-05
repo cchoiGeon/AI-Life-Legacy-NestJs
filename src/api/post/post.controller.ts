@@ -10,8 +10,10 @@ import { PostService } from './post.service';
 import { SavePostDTO, PatchPostDTO } from './dto/post.dto';
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('post')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(private postService: PostService) {}

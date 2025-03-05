@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class SuccessResponseDTO {
+export class SuccessResponseDTO<T> {
   @ApiProperty({
     description: 'HTTP 상태 코드',
     example: 200,
@@ -13,24 +13,19 @@ export class SuccessResponseDTO {
   })
   message: string;
 
-  @ApiProperty({
-    description: 'Response 데이터',
-    example: 'Response Data',
-  })
-  result: any;
+  @ApiPropertyOptional({ description: '응답 데이터' })
+  result?: T;
 
-  constructor(result: any = null) {
-    this.message = 'Success'; // 기본 메시지 "Success"를 제공
-    this.statusCode = 200;
-    if (result) {
-      this.result = result;
-    }
+  constructor(result?: T, statusCode = 200, message = 'Success') {
+    this.statusCode = statusCode;
+    this.message = message;
+    this.result = result;
   }
 }
 export class Success204ResponseDTO {
   @ApiProperty({
     description: 'HTTP 상태 코드',
-    example: 200,
+    example: 204,
   })
   statusCode: number;
 

@@ -1,7 +1,18 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Posts } from "./posts.entity";
-import { UserCase } from "./user-case.entity";
+import { Posts } from './posts.entity';
+import { UserCase } from './user-case.entity';
 
 @Entity('users')
 export class Users extends BaseEntity {
