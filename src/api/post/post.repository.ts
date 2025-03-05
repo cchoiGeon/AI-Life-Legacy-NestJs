@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Posts } from '../../db/entity/posts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InternalServerErrorException } from '@nestjs/common';
+import { CustomInternalServerException } from '../../common/exception/exception';
 
 export class PostRepository {
   constructor(
@@ -20,7 +20,7 @@ export class PostRepository {
       });
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
   async findAllUserPostsByUUID(uuid: string) {
@@ -33,7 +33,7 @@ export class PostRepository {
       });
     } catch (error) {
       console.error('Error in getPost:', error);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -47,7 +47,7 @@ export class PostRepository {
       });
     } catch (error) {
       console.error('Error in savePost:', error);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -65,7 +65,7 @@ export class PostRepository {
       );
     } catch (error) {
       console.error('Error in updatePost:', error);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 }

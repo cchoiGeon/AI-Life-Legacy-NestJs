@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Users } from '../../db/entity/users.entity';
 import { Repository } from 'typeorm';
 import * as config from 'config';
+import { CustomNotFoundException } from '../../common/exception/exception';
 
 const jwtConfig = config.get('jwt');
 
@@ -25,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { uuid } = payload;
     const user: Users = await this.userRepository.findOne({ where: { uuid } });
     if (!user) {
-      throw new NotFoundException('존재하지 않는 유저입니다.');
+      throw new CustomNotFoundException('Not Found User');
     }
     return user;
   }

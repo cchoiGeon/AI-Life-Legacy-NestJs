@@ -1,7 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/db/entity/users.entity';
 import { Repository } from 'typeorm';
+import { CustomInternalServerException } from '../../common/exception/exception';
 
 @Injectable()
 export class UserRepository {
@@ -18,7 +19,7 @@ export class UserRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -29,7 +30,7 @@ export class UserRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -42,7 +43,7 @@ export class UserRepository {
       return await this.userRepository.save(user);
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -51,7 +52,7 @@ export class UserRepository {
       return await this.userRepository.save(user);
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -67,7 +68,7 @@ export class UserRepository {
       );
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 
@@ -76,7 +77,7 @@ export class UserRepository {
       return await this.userRepository.softRemove(user);
     } catch (err) {
       console.error('Error deleting user:', err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 }

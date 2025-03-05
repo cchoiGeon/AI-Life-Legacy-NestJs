@@ -1,6 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import * as config from 'config';
+import { CustomInternalServerException } from '../../common/exception/exception';
 
 const chatgptConfig = config.get('chatgpt');
 
@@ -26,7 +27,7 @@ export class AiService {
       return response.choices[0]?.message.content ?? 'No response from GPT';
     } catch (error) {
       console.error('Error calling GPT-4:', error);
-      throw new InternalServerErrorException('ChatGPT API ERROR');
+      throw new CustomInternalServerException();
     }
   }
 }

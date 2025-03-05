@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contents } from '../../db/entity/contents.entity';
-import { InternalServerErrorException } from '@nestjs/common';
+import { CustomInternalServerException } from '../../common/exception/exception';
 
 export class ContentsRepository {
   constructor(
@@ -19,7 +19,7 @@ export class ContentsRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new InternalServerErrorException();
+      throw new CustomInternalServerException();
     }
   }
 }

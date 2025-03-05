@@ -5,7 +5,7 @@ export class SuccessResponseDTO<T> {
     description: 'HTTP 상태 코드',
     example: 200,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '성공 메시지',
@@ -16,8 +16,8 @@ export class SuccessResponseDTO<T> {
   @ApiPropertyOptional({ description: '응답 데이터' })
   result?: T;
 
-  constructor(result?: T, statusCode = 200, message = 'Success') {
-    this.statusCode = statusCode;
+  constructor(result?: T, status = 200, message = 'Success') {
+    this.status = status;
     this.message = message;
     this.result = result;
   }
@@ -27,7 +27,7 @@ export class Success201ResponseDTO<T> {
     description: 'HTTP 상태 코드',
     example: 201,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '성공 메시지',
@@ -38,8 +38,8 @@ export class Success201ResponseDTO<T> {
   @ApiPropertyOptional({ description: '응답 데이터' })
   result?: T;
 
-  constructor(result?: T, statusCode = 201, message = 'Success') {
-    this.statusCode = statusCode;
+  constructor(result?: T, status = 201, message = 'Success') {
+    this.status = status;
     this.message = message;
     this.result = result;
   }
@@ -49,7 +49,7 @@ export class Success204ResponseDTO {
     description: 'HTTP 상태 코드',
     example: 204,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '성공 메시지',
@@ -59,7 +59,7 @@ export class Success204ResponseDTO {
 
   constructor() {
     this.message = 'Success'; // 기본 메시지 "Success"를 제공
-    this.statusCode = 204;
+    this.status = 204;
   }
 }
 
@@ -68,7 +68,7 @@ export class BadRequestResponseDTO {
     description: 'HTTP 상태 코드',
     example: 400,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '에러 메시지',
@@ -78,7 +78,7 @@ export class BadRequestResponseDTO {
 
   constructor(message: string = 'Bad Request') {
     this.message = message;
-    this.statusCode = 400;
+    this.status = 400;
   }
 }
 export class UnauthorizedResponseDTO {
@@ -86,7 +86,7 @@ export class UnauthorizedResponseDTO {
     description: 'HTTP 상태 코드',
     example: 401,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '에러 메시지',
@@ -96,7 +96,7 @@ export class UnauthorizedResponseDTO {
 
   constructor(message: string = 'Unauthorized') {
     this.message = message;
-    this.statusCode = 401;
+    this.status = 401;
   }
 }
 
@@ -105,7 +105,7 @@ export class NotFoundResponseDTO {
     description: 'HTTP 상태 코드',
     example: 404,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '에러 메시지',
@@ -115,7 +115,7 @@ export class NotFoundResponseDTO {
 
   constructor(message: string = 'Not Found') {
     this.message = message;
-    this.statusCode = 404;
+    this.status = 404;
   }
 }
 
@@ -124,7 +124,7 @@ export class ConflictResponseDTO {
     description: 'HTTP 상태 코드',
     example: 409,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '에러 메시지',
@@ -134,7 +134,7 @@ export class ConflictResponseDTO {
 
   constructor(message: string = 'Conflict') {
     this.message = message;
-    this.statusCode = 409;
+    this.status = 409;
   }
 }
 
@@ -144,7 +144,7 @@ export class InternalServerResponseDTO {
     description: 'HTTP 상태 코드',
     example: 500,
   })
-  statusCode: number;
+  status: number;
 
   @ApiProperty({
     description: '에러 메시지',
@@ -154,6 +154,6 @@ export class InternalServerResponseDTO {
 
   constructor(message: string = 'Internal Server Error') {
     this.message = message;
-    this.statusCode = 500;
+    this.status = 500;
   }
 }

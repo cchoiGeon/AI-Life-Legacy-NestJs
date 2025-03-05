@@ -1,9 +1,10 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthCredentialsDto, JwtTokenResponseDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../user/user.repository';
 import * as config from 'config';
+import { CustomConflictException, CustomNotFoundException, CustomUnauthorizedException } from '../../common/exception/exception';
 
 const jwtConfig = config.get('jwt');
 
@@ -18,7 +19,7 @@ export class AuthService {
     const { email, password } = authCredentialsDto;
 
     const existUser = await this.userRepository.findUserByEmail(email);
-    if (existUser) throw new ConflictException('Exist Email');
+    if (existUser) throw new CustomConflictException('Exist Email');
 
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userRepository.createAndSaveUserByEmailAndPassword(email, hashPassword);
@@ -41,10 +42,10 @@ export class AuthService {
     const { email, password } = authCredentialsDto;
 
     const user = await this.userRepository.findUserByEmail(email);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new CustomNotFoundException('User not found');
 
     const checkPassword = await bcrypt.compare(password, user.password);
-    if (!checkPassword) throw new UnauthorizedException('Invalid credentials');
+    if (!checkPassword) throw new CustomUnauthorizedException('Invalid credentials');
 
     const payload = { uuid: user.uuid };
     const accessToken = this.jwtService.sign(payload, {
@@ -65,8 +66,8 @@ export class AuthService {
 
     // 2. 만약 유효하다면, 사용자 데이터베이스에 존재하는 refreshToken과 비교하기
     const user = await this.userRepository.findUserByUUID(payload.uuid);
-    if (!user.refreshToken) throw new UnauthorizedException('유저에 Refresh Token 정보가 없습니다.');
-    if (user.refreshToken != refreshToken) throw new UnauthorizedException('일치하지 않는 Refresh 토큰입니다.');
+    if (!user.refreshToken) throw new CustomUnauthorizedException('유저에 Refresh Token 정보가 없습니다.');
+    if (user.refreshToken != refreshToken) throw new CustomUnauthorizedException('일치하지 않는 Refresh 토큰입니다.');
 
     const newAccessToken = this.jwtService.sign(
       { uuid: payload.uuid },
