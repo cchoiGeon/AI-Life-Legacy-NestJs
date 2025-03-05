@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { SetUserCaseDTO, UserCaseDTO, UserContentAndQuestionsDTO, UserContentDTO, UserPostsDTO, UserUuidDTO } from './dto/user.dto';
 import { NotFoundResponseDTO, Success204ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
-import { ApiBearerAuth, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiDefaultResponses } from '../../common/deco/api-default-response.deco';
 import { ApiSuccess204Response, ApiSuccessResponse } from '../../common/deco/api-paginated-response.deco';
 

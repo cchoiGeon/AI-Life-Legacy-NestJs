@@ -1,9 +1,5 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { AuthCredentialsDto } from './dto/auth.dto';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { AuthCredentialsDto, JwtTokenResponseDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../user/user.repository';
@@ -18,13 +14,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(authCredentialsDto: AuthCredentialsDto) {
+  async signup(authCredentialsDto: AuthCredentialsDto): Promise<JwtTokenResponseDto> {
     const { email, password } = authCredentialsDto;
 
     const existUser = await this.userRepository.findUserByEmail(email);
-    if (existUser) {
-      throw new ConflictException('Exist Email');
-    }
+    if (existUser) throw new ConflictException('Exist Email');
 
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userRepository.createAndSaveUserByEmailAndPassword(email, hashPassword);
@@ -43,18 +37,14 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto) {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<JwtTokenResponseDto> {
     const { email, password } = authCredentialsDto;
 
     const user = await this.userRepository.findUserByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException(); // 적절한 예외 반환
-    }
+    if (!user) throw new NotFoundException('User not found');
 
     const checkPassword = await bcrypt.compare(password, user.password);
-    if (!checkPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    if (!checkPassword) throw new UnauthorizedException('Invalid credentials');
 
     const payload = { uuid: user.uuid };
     const accessToken = this.jwtService.sign(payload, {
@@ -69,9 +59,9 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refresh(refreshToken: string) {
+  async refresh(refreshToken: string): Promise<JwtTokenResponseDto> {
     // 1. 해당 리프레시 토큰이 유효한지 validate 하기
-    const payload = this.jwtService.verify(refreshToken,{ secret: jwtConfig.refresh_token_secret });
+    const payload = this.jwtService.verify(refreshToken, { secret: jwtConfig.refresh_token_secret });
 
     // 2. 만약 유효하다면, 사용자 데이터베이스에 존재하는 refreshToken과 비교하기
     const user = await this.userRepository.findUserByUUID(payload.uuid);

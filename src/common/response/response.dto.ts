@@ -22,6 +22,28 @@ export class SuccessResponseDTO<T> {
     this.result = result;
   }
 }
+export class Success201ResponseDTO<T> {
+  @ApiProperty({
+    description: 'HTTP 상태 코드',
+    example: 201,
+  })
+  statusCode: number;
+
+  @ApiProperty({
+    description: '성공 메시지',
+    example: 'Success',
+  })
+  message: string;
+
+  @ApiPropertyOptional({ description: '응답 데이터' })
+  result?: T;
+
+  constructor(result?: T, statusCode = 201, message = 'Success') {
+    this.statusCode = statusCode;
+    this.message = message;
+    this.result = result;
+  }
+}
 export class Success204ResponseDTO {
   @ApiProperty({
     description: 'HTTP 상태 코드',
@@ -96,6 +118,26 @@ export class NotFoundResponseDTO {
     this.statusCode = 404;
   }
 }
+
+export class ConflictResponseDTO {
+  @ApiProperty({
+    description: 'HTTP 상태 코드',
+    example: 409,
+  })
+  statusCode: number;
+
+  @ApiProperty({
+    description: '에러 메시지',
+    example: 'Conflict',
+  })
+  message: string;
+
+  constructor(message: string = 'Conflict') {
+    this.message = message;
+    this.statusCode = 409;
+  }
+}
+
 
 export class InternalServerResponseDTO {
   @ApiProperty({
