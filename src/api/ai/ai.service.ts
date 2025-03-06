@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-import * as config from 'config';
 import { CustomInternalServerException } from '../../common/exception/exception';
-
-const chatgptConfig = config.get('chatgpt');
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AiService {
   private openai: OpenAI;
+  private readonly apiKey: string;
+  private readonly organization: string;
+  constructor(private readonly configService: ConfigService) {
+    this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
+    this.organization = this.configService.get<string>('OPENAI_ORGANIZATION');
 
-  constructor() {
     this.openai = new OpenAI({
-      apiKey: chatgptConfig.OPENAI_API_KEY,
-      organization: chatgptConfig.OPENAI_ORGANIZATION,
+      apiKey: this.apiKey,
+      organization: this.organization,
     });
   }
 

@@ -3,16 +3,15 @@ import { AuthCredentialsDto, JwtTokenResponseDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../user/user.repository';
-import * as config from 'config';
 import { CustomConflictException, CustomNotFoundException, CustomUnauthorizedException } from '../../common/exception/exception';
-
-const jwtConfig = config.get('jwt');
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userRepository: UserRepository,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signup(authCredentialsDto: AuthCredentialsDto): Promise<JwtTokenResponseDto> {
@@ -26,12 +25,12 @@ export class AuthService {
 
     const payload = { uuid: newUser.uuid };
     const accessToken = this.jwtService.sign(payload, {
-      secret: jwtConfig.access_token_secret,
-      expiresIn: jwtConfig.access_token_expires_in,
+      secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'), // 🔹 환경 변수에서 JWT 시크릿 가져오기
+      expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRES_IN'),
     });
     const refreshToken = this.jwtService.sign(payload, {
-      secret: jwtConfig.refresh_token_secret,
-      expiresIn: jwtConfig.refresh_token_expires_in,
+      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
     });
 
     await this.userRepository.updateUserRefreshToken(newUser.uuid, refreshToken);
@@ -49,38 +48,41 @@ export class AuthService {
 
     const payload = { uuid: user.uuid };
     const accessToken = this.jwtService.sign(payload, {
-      secret: jwtConfig.access_token_secret,
-      expiresIn: jwtConfig.access_token_expires_in,
+      secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRES_IN'),
     });
     const refreshToken = this.jwtService.sign(payload, {
-      secret: jwtConfig.refresh_token_secret,
-      expiresIn: jwtConfig.refresh_token_expires_in,
+      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
     });
+
     await this.userRepository.updateUserRefreshToken(user.uuid, refreshToken);
     return { accessToken, refreshToken };
   }
 
   async refresh(refreshToken: string): Promise<JwtTokenResponseDto> {
     // 1. 해당 리프레시 토큰이 유효한지 validate 하기
-    const payload = this.jwtService.verify(refreshToken, { secret: jwtConfig.refresh_token_secret });
+    const payload = this.jwtService.verify(refreshToken, {
+      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+    });
 
     // 2. 만약 유효하다면, 사용자 데이터베이스에 존재하는 refreshToken과 비교하기
     const user = await this.userRepository.findUserByUUID(payload.uuid);
     if (!user.refreshToken) throw new CustomUnauthorizedException('유저에 Refresh Token 정보가 없습니다.');
-    if (user.refreshToken != refreshToken) throw new CustomUnauthorizedException('일치하지 않는 Refresh 토큰입니다.');
+    if (user.refreshToken !== refreshToken) throw new CustomUnauthorizedException('일치하지 않는 Refresh 토큰입니다.');
 
     const newAccessToken = this.jwtService.sign(
       { uuid: payload.uuid },
       {
-        secret: jwtConfig.access_token_secret,
-        expiresIn: jwtConfig.access_token_expires_in,
+        secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+        expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRES_IN'),
       },
     );
     const newRefreshToken = this.jwtService.sign(
       { uuid: payload.uuid },
       {
-        secret: jwtConfig.refresh_token_secret,
-        expiresIn: jwtConfig.refresh_token_expires_in,
+        secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+        expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
       },
     );
 
