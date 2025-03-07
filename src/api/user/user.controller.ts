@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SetUserCaseDTO, UserCaseDTO, UserContentAndQuestionsDTO, UserContentDTO, UserPostsDTO, UserUuidDTO } from './dto/user.dto';
-import { NotFoundResponseDTO, Success204ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
+import { Success204ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
-import { ApiBearerAuth, ApiBody, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiDefaultResponses } from '../../common/deco/api-default-response.deco';
 import { ApiSuccess204Response, ApiSuccessResponse } from '../../common/deco/api-paginated-response.deco';
 
@@ -16,7 +16,6 @@ export class UserController {
 
   @Get('/:uuid/cases')
   @ApiOperation({ summary: '유저 케이스 불러오기 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(UserCaseDTO)
   @ApiDefaultResponses()
   async getUserCase(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserCaseDTO>> {
@@ -27,7 +26,6 @@ export class UserController {
   @Put('/:uuid/cases')
   @ApiOperation({ summary: '유저 케이스 저장하기 API' })
   @ApiBody({ type: SetUserCaseDTO })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(UserCaseDTO)
   @ApiDefaultResponses()
   async setUserCase(@Body() setUserCaseDTO: SetUserCaseDTO, @Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserCaseDTO>> {
@@ -37,7 +35,6 @@ export class UserController {
 
   @Get('/:uuid/contents')
   @ApiOperation({ summary: '유저 맞춤형 목차 불러오기 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(UserContentDTO, true)
   @ApiDefaultResponses()
   async getUserContents(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserContentDTO[]>> {
@@ -47,7 +44,6 @@ export class UserController {
 
   @Get('/:uuid/contents/:contentsId/questions')
   @ApiOperation({ summary: '유저 맞춤형 목차별 질문들 불러오기 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(UserContentAndQuestionsDTO)
   @ApiDefaultResponses()
   async getUserQuestions(@Param('contentsId', ParseIntPipe) contentsId: number): Promise<SuccessResponseDTO<UserContentAndQuestionsDTO>> {
@@ -56,7 +52,6 @@ export class UserController {
 
   @Get('/:uuid/posts')
   @ApiOperation({ summary: '유저 자서전 데이터 모두 불러오기 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(UserPostsDTO, true)
   @ApiDefaultResponses()
   async getAllUserPosts(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserPostsDTO[]>> {
@@ -66,7 +61,6 @@ export class UserController {
 
   @Delete('/:uuid')
   @ApiOperation({ summary: '회원탈퇴 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccess204Response
   @ApiDefaultResponses()
   async deleteUser(@Query('deleteType', ParseIntPipe) deleteType: number, @Param() userUuid: UserUuidDTO): Promise<Success204ResponseDTO> {

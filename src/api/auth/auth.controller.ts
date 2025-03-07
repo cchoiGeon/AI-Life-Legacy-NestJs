@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto, JwtTokenResponseDto, RefreshTokenDto } from './dto/auth.dto';
-import { ConflictResponseDTO, NotFoundResponseDTO, Success201ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
-import { ApiConflictResponse, ApiNotFoundResponse, ApiOperation } from '@nestjs/swagger';
+import { ConflictResponseDTO, Success201ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
+import { ApiConflictResponse, ApiOperation } from '@nestjs/swagger';
 import { ApiDefaultResponses } from '../../common/deco/api-default-response.deco';
 import { ApiSuccess201Response, ApiSuccessResponse } from '../../common/deco/api-paginated-response.deco';
 
@@ -21,7 +21,6 @@ export class AuthController {
 
   @Post('/signin')
   @ApiOperation({ summary: '로그인 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(JwtTokenResponseDto)
   @ApiDefaultResponses()
   async signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<SuccessResponseDTO<JwtTokenResponseDto>> {
@@ -30,7 +29,6 @@ export class AuthController {
 
   @Post('/refresh')
   @ApiOperation({ summary: '리프레시 API' })
-  @ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO })
   @ApiSuccessResponse(JwtTokenResponseDto)
   @ApiDefaultResponses()
   async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<SuccessResponseDTO<JwtTokenResponseDto>> {

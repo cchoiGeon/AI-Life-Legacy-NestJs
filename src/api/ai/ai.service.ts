@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import { CustomInternalServerException } from '../../common/exception/exception';
 import { ConfigService } from '@nestjs/config';
+import { AIResponseDTO } from './dto/ai.dto';
 
 @Injectable()
 export class AiService {
@@ -18,7 +19,7 @@ export class AiService {
     });
   }
 
-  async getChatGPTData(prompt: string, token: number): Promise<string> {
+  async getChatGPTData(prompt: string, token: number): Promise<AIResponseDTO> {
     try {
       const response = await this.openai.chat.completions.create({
         model: 'gpt-4o-mini', // OpenAI의 적절한 모델 사용
@@ -26,7 +27,7 @@ export class AiService {
         max_tokens: token,
       });
 
-      return response.choices[0]?.message.content ?? 'No response from GPT';
+      return response.choices[0]?.message;
     } catch (error) {
       console.error('Error calling GPT-4:', error);
       throw new CustomInternalServerException();

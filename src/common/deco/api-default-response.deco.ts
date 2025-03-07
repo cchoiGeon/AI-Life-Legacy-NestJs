@@ -6,6 +6,7 @@ export function ApiDefaultResponses() {
   return applyDecorators(
     ApiBadRequestResponse({ description: 'Bad request', type: BadRequestResponseDTO }),
     ApiUnauthorizedResponse({ description: 'Unauthorized', type: UnauthorizedResponseDTO }),
+    ApiNotFoundResponse({ description: 'Not Found', type: NotFoundResponseDTO }),
     ApiInternalServerErrorResponse({ description: 'Internal Server Error', type: InternalServerResponseDTO }),
   );
 }

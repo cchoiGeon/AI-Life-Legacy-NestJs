@@ -1,40 +1,48 @@
-import { Type } from 'class-transformer';
-import { IsString, IsNumber, IsInt } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class SavePostDTO {
+  @ApiProperty({
+    description: '사용자 최종 답변',
+    example: '사용자 최종 답변',
+  })
   @IsString()
   response: string;
 
+  @ApiProperty({
+    description: '목차 id',
+    example: 1,
+  })
   @IsNumber()
   contentId: number;
 
+  @ApiProperty({
+    description: '질문 id',
+    example: 1,
+  })
   @IsNumber()
   questionId: number;
 }
 
 export class PatchPostDTO {
+  @ApiProperty({
+    description: '사용자 최종 답변',
+    example: '사용자 최종 답변',
+  })
   @IsString()
   response: string;
 
+  @ApiProperty({
+    description: '목차 id',
+    example: 1,
+  })
   @IsNumber()
   contentId: number;
 
+  @ApiProperty({
+    description: '질문 id',
+    example: 1,
+  })
   @IsNumber()
   questionId: number;
-}
-
-export class CheckExistPostByMainIdDTO {
-  @Type(() => Number) // 문자열을 숫자로 변환
-  @IsInt() // 숫자인지 검증 (정수만 허용)
-  mainId: number;
-}
-
-export class GetPostDTO {
-  @Type(() => Number) // 문자열을 숫자로 변환
-  @IsInt() // 숫자인지 검증 (정수만 허용)
-  mainId: number;
-
-  @Type(() => Number) // 문자열을 숫자로 변환
-  @IsInt() // 숫자인지 검증 (정수만 허용)
-  subId: number;
 }
