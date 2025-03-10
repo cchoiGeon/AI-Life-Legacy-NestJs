@@ -6,11 +6,12 @@ import { AIResponseDTO, CombineDTO, MakeCaseDTO, MakeReQuestionDTO } from './dto
 import { SuccessResponseDTO } from 'src/common/response/response.dto';
 import { createCasePrompt } from '../../common/prompt/makeCase.prompt';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { ApiSuccessResponse } from '../../common/deco/api-paginated-response.deco';
 import { ApiDefaultResponses } from '../../common/deco/api-default-response.deco';
 
 @Controller('ai')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 export class AiController {
   constructor(private chatGptService: AiService) {}

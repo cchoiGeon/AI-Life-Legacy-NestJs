@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../user/user.repository';
 import { CustomConflictException, CustomNotFoundException, CustomUnauthorizedException } from '../../common/exception/exception';
 import { ConfigService } from '@nestjs/config';
+import { RedisCacheService } from '../redis-cache/redis-cache.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private redisCacheService: RedisCacheService,
   ) {}
 
   async signup(authCredentialsDto: AuthCredentialsDto): Promise<JwtTokenResponseDto> {
@@ -33,7 +35,7 @@ export class AuthService {
       expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
     });
 
-    await this.userRepository.updateUserRefreshToken(newUser.uuid, refreshToken);
+    await this.redisCacheService.set(refreshToken + newUser.uuid, refreshToken);
     return { accessToken, refreshToken };
   }
 
@@ -56,7 +58,7 @@ export class AuthService {
       expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
     });
 
-    await this.userRepository.updateUserRefreshToken(user.uuid, refreshToken);
+    await this.redisCacheService.set(refreshToken + user.uuid, refreshToken);
     return { accessToken, refreshToken };
   }
 
@@ -67,9 +69,9 @@ export class AuthService {
     });
 
     // 2. 만약 유효하다면, 사용자 데이터베이스에 존재하는 refreshToken과 비교하기
-    const user = await this.userRepository.findUserByUUID(payload.uuid);
-    if (!user.refreshToken) throw new CustomUnauthorizedException('유저에 Refresh Token 정보가 없습니다.');
-    if (user.refreshToken !== refreshToken) throw new CustomUnauthorizedException('일치하지 않는 Refresh 토큰입니다.');
+    const cachedRefresh = await this.redisCacheService.get(refreshToken + payload.uuid);
+    if (!cachedRefresh) throw new CustomUnauthorizedException('Refresh token expired');
+    if (cachedRefresh !== refreshToken) throw new CustomUnauthorizedException('Refresh token expired');
 
     const newAccessToken = this.jwtService.sign(
       { uuid: payload.uuid },
@@ -86,8 +88,8 @@ export class AuthService {
       },
     );
 
-    await this.userRepository.updateUserRefreshToken(user.uuid, newRefreshToken);
-
+    await this.redisCacheService.set(newRefreshToken + payload.uuid, newRefreshToken);
+    await this.redisCacheService.delete(refreshToken + payload.uuid);
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 }

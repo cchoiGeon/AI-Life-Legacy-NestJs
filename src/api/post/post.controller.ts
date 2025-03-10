@@ -1,7 +1,7 @@
 import { Body, Controller, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { SavePostDTO, PatchPostDTO } from './dto/post.dto';
-import { Success204ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
+import { Success204ResponseDTO } from 'src/common/response/response.dto';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { ApiSuccess204Response } from '../../common/deco/api-paginated-response.deco';
