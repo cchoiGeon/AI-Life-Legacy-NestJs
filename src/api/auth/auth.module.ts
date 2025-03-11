@@ -9,7 +9,7 @@ import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 @Module({
   imports: [forwardRef(() => UserModule), JwtModule, RedisCacheModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtService], // 서비스와 전략 제공
-  exports: [AuthService], // 외부에서 사용 가능하도록 export
+  providers: [AuthService, JwtService],
+  exports: [AuthService],
 })
 export class AuthModule {}

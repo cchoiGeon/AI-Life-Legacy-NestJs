@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Put, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { SetUserCaseDTO, UserCaseDTO, UserContentAndQuestionsDTO, UserContentDTO, UserPostsDTO, UserUuidDTO } from './dto/user.dto';
+import { SetUserCaseDTO, UserCaseDTO, UserContentAndQuestionsDTO, UserContentDTO, UserPostsDTO } from './dto/user.dto';
 import { Success204ResponseDTO, SuccessResponseDTO } from 'src/common/response/response.dto';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -18,8 +18,7 @@ export class UserController {
   @ApiOperation({ summary: '유저 케이스 불러오기 API' })
   @ApiSuccessResponse(UserCaseDTO)
   @ApiDefaultResponses()
-  async getUserCase(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserCaseDTO>> {
-    const { uuid } = userUuid;
+  async getUserCase(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<SuccessResponseDTO<UserCaseDTO>> {
     return new SuccessResponseDTO(await this.userService.getUserCase(uuid));
   }
 
@@ -28,8 +27,7 @@ export class UserController {
   @ApiBody({ type: SetUserCaseDTO })
   @ApiSuccessResponse(UserCaseDTO)
   @ApiDefaultResponses()
-  async setUserCase(@Body() setUserCaseDTO: SetUserCaseDTO, @Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserCaseDTO>> {
-    const { uuid } = userUuid;
+  async setUserCase(@Body() setUserCaseDTO: SetUserCaseDTO, @Param('uuid', ParseUUIDPipe) uuid: string): Promise<SuccessResponseDTO<UserCaseDTO>> {
     return new SuccessResponseDTO(await this.userService.setUserCase(uuid, setUserCaseDTO));
   }
 
@@ -37,8 +35,7 @@ export class UserController {
   @ApiOperation({ summary: '유저 맞춤형 목차 불러오기 API' })
   @ApiSuccessResponse(UserContentDTO, true)
   @ApiDefaultResponses()
-  async getUserContents(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserContentDTO[]>> {
-    const { uuid } = userUuid;
+  async getUserContents(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<SuccessResponseDTO<UserContentDTO[]>> {
     return new SuccessResponseDTO(await this.userService.getUserContents(uuid));
   }
 
@@ -54,8 +51,7 @@ export class UserController {
   @ApiOperation({ summary: '유저 자서전 데이터 모두 불러오기 API' })
   @ApiSuccessResponse(UserPostsDTO, true)
   @ApiDefaultResponses()
-  async getAllUserPosts(@Param() userUuid: UserUuidDTO): Promise<SuccessResponseDTO<UserPostsDTO[]>> {
-    const { uuid } = userUuid;
+  async getAllUserPosts(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<SuccessResponseDTO<UserPostsDTO[]>> {
     return new SuccessResponseDTO(await this.userService.getAllUserPostsByUUID(uuid));
   }
 
@@ -63,8 +59,7 @@ export class UserController {
   @ApiOperation({ summary: '회원탈퇴 API' })
   @ApiSuccess204Response
   @ApiDefaultResponses()
-  async deleteUser(@Query('deleteType', ParseIntPipe) deleteType: number, @Param() userUuid: UserUuidDTO): Promise<Success204ResponseDTO> {
-    const { uuid } = userUuid;
+  async deleteUser(@Query('deleteType', ParseIntPipe) deleteType: number, @Param('uuid', ParseUUIDPipe) uuid: string): Promise<Success204ResponseDTO> {
     await this.userService.deleteUser(uuid, deleteType);
     return new Success204ResponseDTO();
   }

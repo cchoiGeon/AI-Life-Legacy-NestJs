@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthCredentialsDto, JwtTokenResponseDto } from './dto/auth.dto';
+import { AuthCredentialsDto, JwtTokenResponseDto, RefreshTokenDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../user/user.repository';
@@ -62,7 +62,9 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refresh(refreshToken: string): Promise<JwtTokenResponseDto> {
+  async refresh(refreshTokenDto: RefreshTokenDto): Promise<JwtTokenResponseDto> {
+    const { refreshToken } = refreshTokenDto;
+
     // 1. 해당 리프레시 토큰이 유효한지 validate 하기
     const payload = this.jwtService.verify(refreshToken, {
       secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),

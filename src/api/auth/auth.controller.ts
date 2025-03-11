@@ -32,7 +32,6 @@ export class AuthController {
   @ApiSuccessResponse(JwtTokenResponseDto)
   @ApiDefaultResponses()
   async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<SuccessResponseDTO<JwtTokenResponseDto>> {
-    const { refreshToken } = refreshTokenDto;
-    return new SuccessResponseDTO(await this.authService.refresh(refreshToken));
+    return new SuccessResponseDTO(await this.authService.refresh(refreshTokenDto));
   }
 }
