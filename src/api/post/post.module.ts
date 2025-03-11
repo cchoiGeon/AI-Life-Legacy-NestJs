@@ -7,7 +7,7 @@ import { PostRepository } from './post.repository';
 import { JwtModule } from '../jwt/jwt.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Posts]), JwtModule],
+  imports: [TypeOrmModule.forFeature([Posts])],
   controllers: [PostController],
   providers: [PostService, PostRepository],
   exports: [PostRepository],

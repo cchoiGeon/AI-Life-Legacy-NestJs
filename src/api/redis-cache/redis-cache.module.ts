@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { RedisCacheService } from './redis-cache.service';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
   imports: [
     RedisModule.forRootAsync({
@@ -17,7 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [RedisCacheService, ConfigService],
+  providers: [RedisCacheService],
   exports: [RedisCacheService],
 })
 export class RedisCacheModule {}

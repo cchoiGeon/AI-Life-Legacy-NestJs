@@ -2,11 +2,13 @@ import { Repository } from 'typeorm';
 import { Posts } from '../../db/entity/posts.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomInternalServerException } from '../../common/exception/exception';
+import { LoggerService } from '../logger/logger.service';
 
 export class PostRepository {
   constructor(
     @InjectRepository(Posts)
     private postRepository: Repository<Posts>,
+    private loggerService: LoggerService,
   ) {}
 
   async findUserPostsByContentIdAndQuestionId(uuid: string, contentId: number, questionId: number) {
@@ -18,9 +20,9 @@ export class PostRepository {
           question: { id: questionId },
         },
       });
-    } catch (error) {
-      console.log(error);
-      throw new CustomInternalServerException();
+    } catch (err) {
+      this.loggerService.warn(`Post/FindUserPostsByContentIdAndQuestionId Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
   async findAllUserPostsByUUID(uuid: string) {
@@ -31,9 +33,9 @@ export class PostRepository {
         },
         relations: ['content', 'question'],
       });
-    } catch (error) {
-      console.error('Error in getPost:', error);
-      throw new CustomInternalServerException();
+    } catch (err) {
+      this.loggerService.warn(`Post/FindAllUserPostsByUUID Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 
@@ -45,9 +47,9 @@ export class PostRepository {
         question: { id: questionId },
         response: response,
       });
-    } catch (error) {
-      console.error('Error in savePost:', error);
-      throw new CustomInternalServerException();
+    } catch (err) {
+      this.loggerService.warn(`Post/savePost Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 
@@ -63,9 +65,9 @@ export class PostRepository {
           response,
         },
       );
-    } catch (error) {
-      console.error('Error in updatePost:', error);
-      throw new CustomInternalServerException();
+    } catch (err) {
+      this.loggerService.warn(`Post/updatePost Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 }

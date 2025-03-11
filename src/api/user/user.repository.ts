@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/db/entity/users.entity';
 import { Repository } from 'typeorm';
 import { CustomInternalServerException } from '../../common/exception/exception';
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    private readonly loggerService: LoggerService,
   ) {}
 
   async findUserByUUID(uuid: string) {
@@ -18,8 +20,8 @@ export class UserRepository {
         relations: ['userCase'],
       });
     } catch (err) {
-      console.error(err);
-      throw new CustomInternalServerException();
+      this.loggerService.warn(`User/FindUserByUUID Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 
@@ -29,8 +31,8 @@ export class UserRepository {
         where: { email },
       });
     } catch (err) {
-      console.error(err);
-      throw new CustomInternalServerException();
+      this.loggerService.warn(`User/FindUserByEmail Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 

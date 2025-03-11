@@ -2,11 +2,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contents } from '../../db/entity/contents.entity';
 import { CustomInternalServerException } from '../../common/exception/exception';
+import { LoggerService } from '../logger/logger.service';
 
 export class ContentsRepository {
   constructor(
     @InjectRepository(Contents)
     private contentsRepository: Repository<Contents>,
+    private readonly loggerService: LoggerService,
   ) {}
 
   async findQuestionsByContentsId(contentId: number) {
@@ -18,8 +20,8 @@ export class ContentsRepository {
         relations: ['questions.question'],
       });
     } catch (err) {
-      console.error(err);
-      throw new CustomInternalServerException();
+      this.loggerService.warn(`Content/FindQuestionsByContentsId Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 }

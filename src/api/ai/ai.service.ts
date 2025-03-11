@@ -3,13 +3,17 @@ import OpenAI from 'openai';
 import { CustomInternalServerException } from '../../common/exception/exception';
 import { ConfigService } from '@nestjs/config';
 import { AIResponseDTO } from './dto/ai.dto';
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class AiService {
   private openai: OpenAI;
   private readonly apiKey: string;
   private readonly organization: string;
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly loggerService: LoggerService,
+  ) {
     this.apiKey = this.configService.get<string>('OPENAI_API_KEY');
     this.organization = this.configService.get<string>('OPENAI_ORGANIZATION');
 
@@ -27,10 +31,10 @@ export class AiService {
         max_tokens: token,
       });
 
-      return response.choices[0]?.message;
-    } catch (error) {
-      console.error('Error calling GPT-4:', error);
-      throw new CustomInternalServerException();
+      return { content: response.choices[0]?.message.content };
+    } catch (err) {
+      this.loggerService.warn(`Chat GPT API Error : ${err}`);
+      throw new CustomInternalServerException(err);
     }
   }
 }

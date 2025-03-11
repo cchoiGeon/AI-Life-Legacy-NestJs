@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule as NestJsJwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from '../../db/entity/users.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot(),

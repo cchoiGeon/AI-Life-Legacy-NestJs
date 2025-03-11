@@ -4,7 +4,6 @@ import { AiService } from './ai.service';
 import { JwtModule } from '../jwt/jwt.module';
 
 @Module({
-  imports: [JwtModule],
   controllers: [AiController],
   providers: [AiService],
 })

@@ -10,6 +10,7 @@ import { JwtModule } from './api/jwt/jwt.module';
 import { DatabaseModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
 import { RedisCacheModule } from './api/redis-cache/redis-cache.module';
+import { LoggerModule } from './api/logger/logger.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RedisCacheModule } from './api/redis-cache/redis-cache.module';
     UserCaseModule,
     ContentModule,
     RedisCacheModule,
+    LoggerModule,
   ],
   controllers: [AppController],
 })

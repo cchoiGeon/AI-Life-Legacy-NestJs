@@ -1,12 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { CustomValidationPipe } from './common/pipe/validationPipe.pipe';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
+import { LoggerService } from './api/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new CustomValidationPipe());
+  const logger = app.get(LoggerService);
+
+  app.useGlobalPipes(new ValidationPipe());
   // CORS 활성화
   app.enableCors({
     origin: (origin, callback) => {
@@ -29,7 +32,8 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, documentFactory);
-  app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
